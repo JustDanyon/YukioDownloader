@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "Anime search and download website using Animekai API",
     "engines": {
-      "node": "16.x"
+      "node": "^23.11.0"
     },
     "scripts": {
       "dev": "vercel dev",
