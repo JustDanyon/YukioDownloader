@@ -36,7 +36,7 @@ export default function Home() {
     <div className="min-h-screen bg-gray-100">
       <Head>
         <title>Anime Search</title>
-        <meta name="description" content="Search and download anime" />
+        <meta name="description" content="Search anime using Anime Pahe API" />
       </Head>
 
       <main className="container mx-auto py-8 px-4">
@@ -84,6 +84,9 @@ export default function Home() {
                   </div>
                   <div className="p-3">
                     <h3 className="font-medium text-sm line-clamp-2">{anime.title}</h3>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {anime.episodes} episodes • {anime.type}
+                    </p>
                   </div>
                 </div>
               </Link>
@@ -92,7 +95,7 @@ export default function Home() {
         ) : (
           !loading && (
             <p className="text-center text-gray-500">
-              {error ? '' : 'No results yet. Try searching for an anime!'}
+              {error ? '' : 'Search for anime to get started'}
             </p>
           )
         )}

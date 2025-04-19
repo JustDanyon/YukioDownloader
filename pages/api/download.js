@@ -1,4 +1,4 @@
-import { getDownloadLink } from '../../lib/kai';
+import animePahe from '../../lib/animepahe';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -6,17 +6,17 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { token, id } = req.query;
-    if (!token || !id) {
-      return res.status(400).json({ error: 'Token and ID are required' });
+    const { animeId, episodeId } = req.query;
+    if (!animeId || !episodeId) {
+      return res.status(400).json({ error: 'Both anime ID and episode ID are required' });
     }
 
-    const url = await getDownloadLink(token, id);
-    res.status(200).json({ url });
+    const links = await animePahe.getDownloadLinks(animeId, episodeId);
+    res.status(200).json(links);
   } catch (error) {
-    console.error('API Error:', error);
+    console.error('Download API error:', error);
     res.status(500).json({ 
-      error: 'Failed to get download link',
+      error: 'Failed to fetch download links',
       details: error.message 
     });
   }

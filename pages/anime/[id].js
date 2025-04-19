@@ -5,30 +5,29 @@ import Head from 'next/head';
 export default function AnimeDetails() {
   const router = useRouter();
   const { id } = router.query;
-  
   const [anime, setAnime] = useState(null);
   const [episodes, setEpisodes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [downloading, setDownloading] = useState(null);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     if (!id) return;
 
-    const fetchAnimeDetails = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
         
-        // First get anime info (we'll reuse the search API)
+        // First get anime info (from search cache or new search)
         const searchRes = await fetch(`/api/search?query=${id}`);
         const searchData = await searchRes.json();
-        const animeInfo = searchData.find(a => a.id === id);
+        const animeInfo = searchData.find(a => a.id === id) || {};
         setAnime(animeInfo);
         
         // Then get episodes
-        const episodesRes = await fetch(`/api/episodes?id=${id}`);
+        const episodesRes = await fetch(`/api/episodes?id=${id}&page=${page}`);
         const episodesData = await episodesRes.json();
-        setEpisodes(episodesData.episodes);
+        setEpisodes(episodesData);
         
       } catch (err) {
         console.error('Failed to fetch anime details:', err);
@@ -38,31 +37,8 @@ export default function AnimeDetails() {
       }
     };
 
-    fetchAnimeDetails();
-  }, [id]);
-
-  const handleDownload = async (episodeId) => {
-    try {
-      setDownloading(episodeId);
-      
-      // First get the token (we need to get episodes again)
-      const episodesRes = await fetch(`/api/episodes?id=${id}`);
-      const episodesData = await episodesRes.json();
-      
-      // Then get the download link
-      const downloadRes = await fetch(`/api/download?token=${episodesData.token}&id=${episodeId}`);
-      const { url } = await downloadRes.json();
-      
-      // Open download in new tab
-      window.open(url, '_blank');
-      
-    } catch (err) {
-      console.error('Download failed:', err);
-      alert('Failed to get download link');
-    } finally {
-      setDownloading(null);
-    }
-  };
+    fetchData();
+  }, [id, page]);
 
   if (loading) {
     return (
@@ -107,14 +83,42 @@ export default function AnimeDetails() {
               />
               <div className="flex-1">
                 <h1 className="text-2xl font-bold mb-4">{anime.title}</h1>
-                {/* Add more anime details here if available */}
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <h3 className="font-semibold">Type</h3>
+                    <p>{anime.type}</p>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold">Episodes</h3>
+                    <p>{anime.episodes}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         )}
 
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold mb-4">Episodes</h2>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">Episodes</h2>
+            <div className="flex gap-2">
+              <button 
+                onClick={() => setPage(p => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className="px-3 py-1 bg-gray-200 rounded-md disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span className="px-3 py-1">Page {page}</span>
+              <button 
+                onClick={() => setPage(p => p + 1)}
+                disabled={episodes.length === 0}
+                className="px-3 py-1 bg-gray-200 rounded-md disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </div>
           
           {episodes.length > 0 ? (
             <div className="space-y-2">
@@ -123,14 +127,12 @@ export default function AnimeDetails() {
                   key={episode.id} 
                   className="flex justify-between items-center p-3 border-b border-gray-200 last:border-0"
                 >
-                  <span>{episode.title}</span>
-                  <button
-                    onClick={() => handleDownload(episode.id)}
-                    disabled={downloading === episode.id}
-                    className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
-                  >
-                    {downloading === episode.id ? 'Preparing...' : 'Download'}
-                  </button>
+                  <span>Episode {episode.number}: {episode.title}</span>
+                  <Link href={`/download/${id}/${episode.id}`} passHref>
+                    <button className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                      Download
+                    </button>
+                  </Link>
                 </div>
               ))}
             </div>

@@ -1,4 +1,4 @@
-import { searchAnime } from '../../lib/kai';
+import animePahe from '../../lib/animepahe';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -8,15 +8,15 @@ export default async function handler(req, res) {
   try {
     const { query } = req.query;
     if (!query) {
-      return res.status(400).json({ error: 'Query parameter is required' });
+      return res.status(400).json({ error: 'Search query is required' });
     }
 
-    const results = await searchAnime(query);
+    const results = await animePahe.search(query);
     res.status(200).json(results);
   } catch (error) {
-    console.error('API Error:', error);
+    console.error('Search API error:', error);
     res.status(500).json({ 
-      error: 'Failed to fetch anime',
+      error: 'Failed to search anime',
       details: error.message 
     });
   }
