@@ -1,0 +1,43 @@
+{
+    "name": "anime-downloader",
+    "version": "1.0.0",
+    "description": "Anime search and download website using Animekai API",
+    "engines": {
+      "node": "16.x"
+    },
+    "scripts": {
+      "dev": "vercel dev",
+      "start": "node server.js",
+      "build": "echo 'Build complete'",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+      "@vercel/node": "^2.9.5",
+      "axios": "^1.3.4",
+      "cheerio": "^1.0.0-rc.12",
+      "cors": "^2.8.5",
+      "express": "^4.18.2",
+      "node-fetch": "^2.6.9",
+      "webcrack": "^1.0.0"
+    },
+    "devDependencies": {
+      "@types/node": "^18.14.0",
+      "typescript": "^4.9.5",
+      "vercel": "^28.16.11"
+    },
+    "keywords": [
+      "anime",
+      "downloader",
+      "streaming",
+      "vercel"
+    ],
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/JustDanyon/YukioDownloader"
+    },
+    "bugs": {
+      "url": "https://github.com/JustDanyon/YukioDownloader/issues"
+    },
+    "homepage": "https://github.com/JustDanyon/YukioDownloader"
+  }
