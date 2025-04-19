@@ -11,7 +11,8 @@
       "react": "^18.x",
       "react-dom": "^18.x",
       "node-fetch": "^2.6.7",
-      "webcrack": "^1.0.0"
+      "webcrack": "^1.0.0",
+     "buffer": "^6.0.3"
     },
     "engines": {
       "node": ">=14.x"
