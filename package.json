@@ -1,0 +1,19 @@
+{
+    "name": "yukiodownloader",
+    "version": "1.0.0",
+    "scripts": {
+      "dev": "next dev",
+      "build": "next build",
+      "start": "next start"
+    },
+    "dependencies": {
+      "next": "^12.x",
+      "react": "^18.x",
+      "react-dom": "^18.x",
+      "node-fetch": "^2.6.7",
+      "webcrack": "^1.0.0"
+    },
+    "engines": {
+      "node": ">=14.x"
+    }
+  }
