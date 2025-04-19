@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
         episodesModal.show();
         
         try {
-            const response = await fetch(`/api/episodes/${animeId}`);
+            const response = await fetch(`/api/episodes?id=${animeId}`);
             const episodes = await response.json();
             
             episodesList.innerHTML = '';
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     async function downloadEpisode(episodeId, episodeTitle) {
         try {
-            const response = await fetch(`/api/download/${episodeId}`);
+            const response = await fetch(`/api/download?id=${episodeId}`);
             const data = await response.json();
             
             if (data.downloadUrl) {
